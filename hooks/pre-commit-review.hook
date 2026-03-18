@@ -4,9 +4,10 @@
   "version": "1.0",
   "when": {
     "type": "preToolUse",
-    "pattern": "git_commit"
+    "patterns": ["git_commit"]
   },
   "then": {
-    "action": "Review the staged changes for issues, security concerns, and adherence to project conventions"
+    "type": "askAgent",
+    "prompt": "Review the staged changes for issues, security concerns, and adherence to project conventions"
   }
 }

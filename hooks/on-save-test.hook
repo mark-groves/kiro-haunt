@@ -4,9 +4,10 @@
   "version": "1.0",
   "when": {
     "type": "fileSaved",
-    "pattern": "src/**/*.{js,ts,jsx,tsx}"
+    "patterns": ["src/**/*.{js,ts,jsx,tsx}"]
   },
   "then": {
-    "action": "Find and run tests related to the saved file"
+    "type": "askAgent",
+    "prompt": "Find and run tests related to the saved file"
   }
 }
