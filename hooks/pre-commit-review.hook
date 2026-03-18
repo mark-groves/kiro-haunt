@@ -1,0 +1,13 @@
+{
+  "name": "pre-commit-review",
+  "description": "Review staged changes before committing",
+  "version": "1.0",
+  "when": {
+    "type": "preToolUse",
+    "patterns": ["git_commit"]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Review the staged changes for issues, security concerns, and adherence to project conventions"
+  }
+}

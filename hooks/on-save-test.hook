@@ -1,0 +1,13 @@
+{
+  "name": "on-save-test",
+  "description": "Run related tests when source files are saved",
+  "version": "1.0",
+  "when": {
+    "type": "fileSaved",
+    "patterns": ["src/**/*.{js,ts,jsx,tsx}"]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Find and run tests related to the saved file"
+  }
+}
