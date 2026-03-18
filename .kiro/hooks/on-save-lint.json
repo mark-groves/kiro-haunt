@@ -1,0 +1,12 @@
+{
+  "name": "on-save-lint",
+  "description": "Run linting on saved files",
+  "version": "1.0",
+  "when": {
+    "type": "fileSaved",
+    "pattern": "src/**/*.{js,ts,jsx,tsx}"
+  },
+  "then": {
+    "action": "Lint the saved file and fix any issues"
+  }
+}
