@@ -1,0 +1,27 @@
+{
+  // markdownlint configuration for kiro-haunt
+  // Docs: https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md
+  "config": {
+    // MD013 - Line length
+    // Disabled: Agent prompts and descriptions naturally exceed 80 chars.
+    // Hard wrapping mid-sentence hurts readability in prose-heavy files.
+    "MD013": false,
+
+    // MD033 - Inline HTML
+    // Disabled: Some markdown renderers and tools use inline HTML for
+    // features not available in standard markdown (e.g. <details>,
+    // <summary>, anchors with attributes).
+    "MD033": false,
+
+    // MD024 - Multiple headings with the same content
+    // Disabled: Repeated headings like "## Examples" or "## Step 1" are
+    // common in structured documents with parallel sections.
+    "MD024": false,
+
+    // MD041 - First line should be a top-level heading
+    // Disabled: Agent prompt files often start with persona instructions
+    // ("You are...") rather than a heading. The heading is metadata,
+    // not content.
+    "MD041": false
+  }
+}
