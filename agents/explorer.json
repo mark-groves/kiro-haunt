@@ -1,80 +1,48 @@
 {
   "name": "explorer",
   "description": "Codebase reconnaissance agent. Dispatched to gather project understanding — either a full architectural survey or a targeted deep-dive into a specific question. Automatically detects which mode is needed from the task description. Strictly read-only, enforced at the tool configuration level.",
-  "prompt": "file://./explorer-cli-prompt.md",
-  "tools": ["read", "shell", "@context7"],
-  "allowedTools": ["read", "@context7"],
+  "prompt": "file://./prompts/explorer-cli-prompt.md",
+  "tools": ["read", "shell"],
+  "allowedTools": ["read", "shell"],
   "toolsSettings": {
     "shell": {
       "allowedCommands": [
-        "ls *",
-        "tree *",
-        "cat *",
-        "head *",
-        "tail *",
-        "wc *",
-        "file *",
-        "du *",
-        "grep *",
-        "rg *",
-        "awk *",
-        "sort *",
-        "uniq *",
-        "cut *",
-        "diff *",
-        "stat *",
-        "find *",
-        "git log*",
-        "git diff*",
-        "git show*",
-        "git branch",
-        "git branch --list*",
-        "git branch -a*",
-        "git branch -r*",
-        "git branch -v*",
-        "git status*",
+        "awk",
+        "sort",
+        "uniq",
+        "cut",
+        "du",
+        "find",
+        "rg",
+        "tree",
         "git remote -v",
-        "git tag -l*",
-        "git tag --list*",
-        "npm ls*",
-        "npm view*",
-        "pip list*",
-        "pip show*",
-        "cargo tree*"
+        "git tag",
+        "npm ls",
+        "npm view",
+        "pip list",
+        "pip show",
+        "cargo tree"
       ],
-      "deniedCommands": [
-        "find * -delete*",
-        "find * -exec*",
-        "find * -execdir*",
-        "find * -ok*",
-        "find * -okdir*",
-        "git branch -d*",
-        "git branch -D*",
-        "git branch -m*",
-        "git branch -M*"
-      ]
+      "autoAllowReadonly": true,
+      "denyByDefault": true
     }
   },
   "hooks": {
     "preToolUse": [
       {
         "matcher": "execute_bash",
-        "command": "{ echo \"[EXPLORER $(date -Iseconds)]\"; cat; echo; } >> /tmp/explorer-audit.log"
+        "command": "{ echo \"[EXPLORER $(date -Iseconds)]\"; cat; echo; } >> /tmp/explorer-audit.log",
+        "timeout_ms": 5000
+      }
+    ],
+    "stop": [
+      {
+        "command": "echo \"[EXPLORER DONE $(date -Iseconds)]\" >> /tmp/explorer-audit.log",
+        "timeout_ms": 3000
       }
     ]
   },
-  "resources": [
-    "file://README.md",
-    "file://package.json",
-    "file://pyproject.toml",
-    "file://Cargo.toml",
-    "file://go.mod",
-    "file://docker-compose.yml",
-    "file://Dockerfile",
-    "file://.github/workflows/*.yml"
-  ],
   "includeMcpJson": false,
   "model": "claude-sonnet-4",
-  "keyboardShortcut": "ctrl+shift+e",
   "welcomeMessage": "Explorer active (read-only, shell mutations blocked). Describe what you need — full recon or a specific question — and I'll adapt."
 }
