@@ -1,0 +1,48 @@
+{
+  "name": "explorer",
+  "description": "Codebase reconnaissance agent. Dispatched to gather project understanding — either a full architectural survey or a targeted deep-dive into a specific question. Automatically detects which mode is needed from the task description. Strictly read-only, enforced at the tool configuration level.",
+  "prompt": "file://./prompts/explorer-cli-prompt.md",
+  "tools": ["read", "shell"],
+  "allowedTools": ["read", "shell"],
+  "toolsSettings": {
+    "shell": {
+      "allowedCommands": [
+        "awk",
+        "sort",
+        "uniq",
+        "cut",
+        "du",
+        "find",
+        "rg",
+        "tree",
+        "git remote -v",
+        "git tag",
+        "npm ls",
+        "npm view",
+        "pip list",
+        "pip show",
+        "cargo tree"
+      ],
+      "autoAllowReadonly": true,
+      "denyByDefault": true
+    }
+  },
+  "hooks": {
+    "preToolUse": [
+      {
+        "matcher": "execute_bash",
+        "command": "{ echo \"[EXPLORER $(date -Iseconds)]\"; cat; echo; } >> /tmp/explorer-audit.log",
+        "timeout_ms": 5000
+      }
+    ],
+    "stop": [
+      {
+        "command": "echo \"[EXPLORER DONE $(date -Iseconds)]\" >> /tmp/explorer-audit.log",
+        "timeout_ms": 3000
+      }
+    ]
+  },
+  "includeMcpJson": false,
+  "model": "claude-sonnet-4.6",
+  "welcomeMessage": "Explorer active (read-only, shell mutations blocked). Describe what you need — full recon or a specific question — and I'll adapt."
+}
