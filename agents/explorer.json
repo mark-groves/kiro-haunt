@@ -43,6 +43,6 @@
     ]
   },
   "includeMcpJson": false,
-  "model": "claude-sonnet-4",
+  "model": "claude-sonnet-4.6",
   "welcomeMessage": "Explorer active (read-only, shell mutations blocked). Describe what you need — full recon or a specific question — and I'll adapt."
 }
