@@ -2,8 +2,8 @@
   "name": "code-reviewer",
   "description": "Code review agent. Dispatched to analyze code for bugs, security vulnerabilities, performance issues, complexity, and adherence to project conventions. Automatically detects review scope — staged diff, specific files, or full PR — and adapts depth accordingly. Strictly read-only, enforced at the tool configuration level.",
   "prompt": "file://./prompts/code-reviewer-prompt.md",
-  "tools": ["read", "glob", "grep", "shell"],
-  "allowedTools": ["read", "glob", "grep", "shell"],
+  "tools": ["read", "glob", "grep", "shell", "code"],
+  "allowedTools": ["read", "glob", "grep", "shell", "code"],
   "toolsSettings": {
     "shell": {
       "allowedCommands": [
