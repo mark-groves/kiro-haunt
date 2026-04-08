@@ -1,0 +1,54 @@
+{
+  "name": "doc-reviewer",
+  "description": "Documentation review agent. Dispatched to audit documentation for accuracy, completeness, and freshness by cross-referencing against the actual codebase. Automatically detects review scope — auditing existing docs, reviewing doc changes in a diff/PR, or identifying undocumented public APIs. Strictly read-only, enforced at the tool configuration level.",
+  "prompt": "file://./prompts/doc-reviewer-prompt.md",
+  "tools": ["read", "glob", "grep", "shell"],
+  "allowedTools": ["read", "glob", "grep", "shell"],
+  "toolsSettings": {
+    "shell": {
+      "allowedCommands": [
+        "awk",
+        "sort",
+        "uniq",
+        "cut",
+        "wc",
+        "find",
+        "head",
+        "tail",
+        "rg",
+        "grep",
+        "git diff",
+        "git log",
+        "git blame",
+        "git show",
+        "git shortlog",
+        "git rev-list",
+        "git diff-tree",
+        "git name-rev",
+        "git merge-base",
+        "git branch",
+        "git ls-files"
+      ],
+      "autoAllowReadonly": true,
+      "denyByDefault": true
+    }
+  },
+  "hooks": {
+    "preToolUse": [
+      {
+        "matcher": "execute_bash",
+        "command": "{ echo \"[DOC-REVIEWER $(date -Iseconds)]\"; cat; echo; } >> /tmp/doc-reviewer-audit.log",
+        "timeout_ms": 5000
+      }
+    ],
+    "stop": [
+      {
+        "command": "echo \"[DOC-REVIEWER DONE $(date -Iseconds)]\" >> /tmp/doc-reviewer-audit.log",
+        "timeout_ms": 3000
+      }
+    ]
+  },
+  "includeMcpJson": false,
+  "model": "claude-sonnet-4.6",
+  "welcomeMessage": "Doc reviewer active (read-only, shell mutations blocked). Describe what to review — specific doc files, doc changes in a diff/PR, or request a coverage audit of undocumented APIs — and I'll deliver structured findings with severity ratings."
+}
