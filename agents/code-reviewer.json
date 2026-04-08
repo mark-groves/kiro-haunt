@@ -1,7 +1,51 @@
 {
   "name": "code-reviewer",
-  "description": "Reviews code for quality, security, and best practices",
-  "prompt": "You are a code reviewer. Analyze code for bugs, security issues, performance problems, and adherence to best practices. Provide actionable feedback.",
-  "tools": ["read", "shell"],
-  "allowedTools": ["read"]
+  "description": "Code review agent. Dispatched to analyze code for bugs, security vulnerabilities, performance issues, complexity, and adherence to project conventions. Automatically detects review scope — staged diff, specific files, or full PR — and adapts depth accordingly. Strictly read-only, enforced at the tool configuration level.",
+  "prompt": "file://./prompts/code-reviewer-prompt.md",
+  "tools": ["read", "glob", "grep", "shell"],
+  "allowedTools": ["read", "glob", "grep", "shell"],
+  "toolsSettings": {
+    "shell": {
+      "allowedCommands": [
+        "awk",
+        "sort",
+        "uniq",
+        "cut",
+        "wc",
+        "find",
+        "rg",
+        "grep",
+        "git diff",
+        "git log",
+        "git blame",
+        "git show",
+        "git shortlog",
+        "git rev-list",
+        "git diff-tree",
+        "git name-rev",
+        "git merge-base",
+        "git branch"
+      ],
+      "autoAllowReadonly": true,
+      "denyByDefault": true
+    }
+  },
+  "hooks": {
+    "preToolUse": [
+      {
+        "matcher": "execute_bash",
+        "command": "{ echo \"[CODE-REVIEWER $(date -Iseconds)]\"; cat; echo; } >> /tmp/code-reviewer-audit.log",
+        "timeout_ms": 5000
+      }
+    ],
+    "stop": [
+      {
+        "command": "echo \"[CODE-REVIEWER DONE $(date -Iseconds)]\" >> /tmp/code-reviewer-audit.log",
+        "timeout_ms": 3000
+      }
+    ]
+  },
+  "includeMcpJson": false,
+  "model": "claude-sonnet-4.6",
+  "welcomeMessage": "Code reviewer active (read-only, shell mutations blocked). Describe what to review — a diff, specific files, or a PR branch — and I'll deliver structured findings with severity ratings."
 }
