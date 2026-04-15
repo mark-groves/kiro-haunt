@@ -1,0 +1,13 @@
+{
+  "name": "on-save-doc-review",
+  "description": "Review documentation files when saved for accuracy against codebase",
+  "version": "1.0",
+  "when": {
+    "type": "fileSaved",
+    "patterns": ["**/*.md", "docs/**/*", "README*"]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Audit the saved documentation file for accuracy, completeness, and freshness against the current codebase"
+  }
+}
